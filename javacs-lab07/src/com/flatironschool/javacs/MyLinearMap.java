@@ -3,12 +3,7 @@
  */
 package com.flatironschool.javacs;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of a Map using a List of entries, so most
@@ -64,6 +59,23 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	 */
 	private Entry findEntry(Object target) {
         // TODO: fill this in
+
+        Iterator it = entries.iterator();
+        while (it.hasNext()) {
+            Entry ent = (Entry)it.next();
+            if (equals(target, ent.getKey())) {
+                return ent;
+            }
+        }
+
+        /*
+        for (Entry entry : entries) {
+            if (equals(target, entry.getKey())) {
+                return entry;
+            }
+        }
+        */
+
 		return null;
 	}
 
@@ -99,7 +111,13 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	@Override
 	public V get(Object key) {
         // TODO: fill this in.
-		return null;
+
+        Entry entry = findEntry(key);
+        if (entry == null) {
+            return null;
+        }
+
+		return entry.getValue();
 	}
 
 	@Override
@@ -119,6 +137,22 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	@Override
 	public V put(K key, V value) {
         // TODO: fill this in.
+
+        //if (key == null) {
+        //    throw new NullPointerException("The key is null");
+        //}
+
+
+        Entry entry = findEntry(key);
+        if (entry == null) {
+            entry = new Entry(key, value);
+        } else {
+            V oldVal = entry.getValue();
+            entry.setValue(value);
+            return oldVal;
+        }
+        entries.add(entry);
+
         return null;
 	}
 
@@ -132,7 +166,17 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	@Override
 	public V remove(Object key) {
         // TODO: fill this in.
-        return null;
+
+        Entry entry = findEntry(key);
+
+        V oldVal = null;
+        if (entry != null) {
+            oldVal = entry.getValue();
+        }
+
+        entries.remove(entry);
+
+        return oldVal;
 	}
 
 	@Override
